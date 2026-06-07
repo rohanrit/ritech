@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, IconButton, Drawer, List, ListItem, ListItemText } from '@mui/material';
+import { IconButton, Drawer, List, ListItem, ListItemText } from '@mui/material';
 import MenuIcon from "@mui/icons-material/Menu";
 
 interface NavbarProps {
@@ -23,12 +23,17 @@ const NavbarItem: React.FC<NavbarItemProps> = ({ text, onClick, isActive, scroll
 
   return (
     <li
-      className={`relative leading-[160%] inline-block min-w-[49px] whitespace-nowrap text-md font-semibold ${
-        isActive ? 'border-b-2 border-yellow-500' : ''
+      className={`relative leading-[160%] inline-block min-w-[49px] whitespace-nowrap text-sm font-mono font-medium tracking-wider uppercase transition-all duration-300 ${
+        isActive
+          ? 'text-brand-glow'
+          : 'text-slate-400 hover:text-brand-cyan'
       }`}
       onClick={handleClick}
       style={{ cursor: 'pointer' }}
     >
+      {isActive && (
+        <span className="absolute -bottom-1 left-0 right-0 h-[2px] bg-brand-glow shadow-neon-glow" />
+      )}
       {text}
     </li>
   );
@@ -46,7 +51,6 @@ const Navbar: React.FC<NavbarProps> = ({ scrollRefs }) => {
     ) {
       return;
     }
-
     setDrawerOpen(open);
   };
 
@@ -56,12 +60,8 @@ const Navbar: React.FC<NavbarProps> = ({ scrollRefs }) => {
         setDrawerOpen(false);
       }
     };
-
     window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
+    return () => window.removeEventListener('resize', handleResize);
   }, [drawerOpen]);
 
   const handleMenuItemClick = (item: string) => {
@@ -70,148 +70,102 @@ const Navbar: React.FC<NavbarProps> = ({ scrollRefs }) => {
 
   return (
     <>
-      <header className="self-stretch flex flex-row items-start justify-start py-0 pr-0 pl-0.5 box-border text-left text-base text-background-paper font-montserrat">
-        <div className="flex-1 bg-darkslategray-200 box-border overflow-hidden flex flex-row items-start justify-start pt-[26px] px-[40px] pb-6 max-w-full border-b-[1px] border-solid border-neutral-grey md:px-[34px] md:box-border">
-          <div className="flex-1 flex flex-row items-start justify-between gap-[20px]">
-            <div className="flex flex-col items-start justify-start pt-[9px] px-0 pb-0 ">
-              <div className="flex flex-row items-start justify-start gap-[5px]">
-                <img
-                  className="h-[30px] w-[30px] relative object-cover"
-                  alt=""
-                  src="/atom-editor@2x.png"
-                />
-                <div className="flex flex-col items-start justify-start pt-[5px] px-0 pb-0">
-                  <div className="relative font-bold inline-block whitespace-nowrap">
-                    RiTech
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-row items-start justify-start gap-[127px] md:w-[798px] md:gap-[32px] lg:gap-[63px] lg:hidden">
-              <div className="flex-1 flex flex-col items-start justify-start pt-2.5 px-0 pb-0 box-border max-w-full">
-                <div className="self-stretch flex flex-col items-start justify-start gap-[1px]">
-                  <nav className="m-0 self-stretch flex flex-row items-start justify-between gap-[30px] text-left text-base text-ghostwhite">
-                    {menuItems.map((item, index) => (
-                      <NavbarItem
-                        key={index}
-                        text={item}
-                        onClick={() => handleMenuItemClick(item)}
-                        isActive={activeMenuItem === item}
-                        scrollRef={scrollRefs[item]}
-                      />
-                    ))}
-                  </nav>
-                </div>
-              </div>
-              <div className="w-[186px] flex flex-row items-start justify-start gap-[30px]">
-                <Button
-                  className="h-12 flex-1"
-                  sx={{
-                    textTransform: 'none',
-                    color: '#ac6cff',
-                    borderRadius: '15px',
-                    background: 'transparent',
-                    '&:hover': { background: '#ffffff' },
-                    height: 48,
-                  }}
-                >
-                  Login
-                </Button>
-                <Button
-                  className="h-12 flex-1"
-                  variant="contained"
-                  sx={{
-                    textTransform: 'none',
-                    color: '#f8f9ff',
-                    background: '#ac6cff',
-                    borderRadius: '15px',
-                    '&:hover': { background: '#f2eef6', color: '#ac6cff' },
-                    height: 48,
-                  }}
-                >
-                  Sign Up
-                </Button>
-              </div>
-            </div>
-            <div className="hidden lg:flex">
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                onClick={toggleDrawer(true)}
-              >
-                <MenuIcon />
-              </IconButton>
-            </div>
+      <header className="sticky top-0 z-50 w-full border-b border-brand-border bg-brand-dark/10 backdrop-blur-md">
+        <div className="container mx-auto flex h-16 items-center justify-between px-6">
+          <a href="#" className="flex items-center space-x-3 group">
+            <img
+              className="h-9 w-auto object-contain"
+              alt="RiTech"
+              src="/ritech-logo.png"
+            />
+          </a>
+
+          <nav className="hidden lg:flex items-center space-x-8">
+            {menuItems.map((item, index) => (
+              <NavbarItem
+                key={index}
+                text={item}
+                onClick={() => handleMenuItemClick(item)}
+                isActive={activeMenuItem === item}
+                scrollRef={scrollRefs[item]}
+              />
+            ))}
+          </nav>
+
+          <div className="hidden lg:flex items-center space-x-4">
+            <button className="relative px-4 py-2 text-xs font-mono font-semibold text-brand-glow rounded-md border border-brand-cyan/30 bg-brand-cyan/5 hover:bg-brand-cyan/10 transition-all shadow-neon-glow">
+              SYS_ACTIVE
+            </button>
+          </div>
+
+          <div className="lg:hidden flex items-center">
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              onClick={toggleDrawer(true)}
+              sx={{ color: '#00F0FF' }}
+            >
+              <MenuIcon />
+            </IconButton>
           </div>
         </div>
       </header>
-      <div>
-        <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}
-          sx={{
-            '& .MuiDrawer-paper': {
-              backgroundColor: '#333',
-              color: 'white',
-              minWidth: '250px'
-            },
-            '& .MuiTypography-root': {
-              fontFamily: 'inherit',
-            },
-          }}>
-          <div
-            className="p-4 outline-none"
-            role="presentation"
-            onClick={toggleDrawer(false)}
-            onKeyDown={toggleDrawer(false)}
-          >
-            <List>
-              {menuItems.map((item, index) => (
-                <ListItem key={index} button>
-                  <ListItemText primary={<NavbarItem
-                    key={index}
-                    text={item}
-                    onClick={() => handleMenuItemClick(item)}
-                    isActive={activeMenuItem === item}
-                    scrollRef={scrollRefs[item]}
-                  />} />
-                </ListItem>
-              ))}
-              <ListItem>
-                <Button
-                  className="h-12 flex-1"
-                  sx={{
-                    textTransform: 'none',
-                    color: '#ac6cff',
-                    borderRadius: '15px',
-                    background: 'transparent',
-                    '&:hover': { background: '#ffffff' },
-                    height: 48,
-                  }}
-                >
-                  Login
-                </Button>
-              </ListItem>
-              <ListItem>
-                <Button
-                  className="h-12 flex-1"
-                  variant="contained"
-                  sx={{
-                    textTransform: 'none',
-                    color: '#f8f9ff',
-                    background: '#ac6cff',
-                    borderRadius: '15px',
-                    '&:hover': { background: '#f2eef6', color: '#ac6cff' },
-                    height: 48,
-                  }}
-                >
-                  Sign Up
-                </Button>
-              </ListItem>
-            </List>
+
+      <Drawer
+        anchor="right"
+        open={drawerOpen}
+        onClose={toggleDrawer(false)}
+        sx={{
+          '& .MuiDrawer-paper': {
+            backgroundColor: '#0B1329',
+            borderLeft: '1px solid #1E293B',
+            color: '#f8f9ff',
+            minWidth: '250px',
+          },
+        }}
+      >
+        <div
+          className="p-4 outline-none"
+          role="presentation"
+          onClick={toggleDrawer(false)}
+          onKeyDown={toggleDrawer(false)}
+        >
+          <div className="flex items-center mb-8 mt-4 px-2">
+            <img
+              className="h-8 w-auto object-contain"
+              alt="RiTech"
+              src="/ritech-logo.png"
+            />
           </div>
-        </Drawer>
-      </div>
+          <List>
+            {menuItems.map((item, index) => (
+              <ListItem key={index} disablePadding sx={{ mb: 0.5 }}>
+                <ListItemText
+                  primary={
+                    <span
+                      className={`block px-4 py-2 rounded-md text-sm font-mono tracking-wider uppercase transition-all ${
+                        activeMenuItem === item
+                          ? 'text-brand-glow bg-brand-cyan/5 border border-brand-cyan/20'
+                          : 'text-slate-400 hover:text-brand-cyan hover:bg-brand-border/30'
+                      }`}
+                      onClick={() => {
+                        handleMenuItemClick(item);
+                        if (scrollRefs[item]?.current) {
+                          window.scrollTo({ top: scrollRefs[item].current!.offsetTop, behavior: 'smooth' });
+                        }
+                      }}
+                    >
+                      {item}
+                    </span>
+                  }
+                />
+              </ListItem>
+            ))}
+          </List>
+        </div>
+      </Drawer>
     </>
   );
 };

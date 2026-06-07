@@ -7,8 +7,6 @@ export type ExpressionEvolverType = {
   responsiveWebsiteDesignAn?: string;
   basicSEO?: string;
   socialMediaManagement?: string;
-
-  /** Style props */
   propPadding?: CSSProperties["padding"];
   propGap?: CSSProperties["gap"];
   propAlignSelf?: CSSProperties["alignSelf"];
@@ -29,37 +27,29 @@ const ExpressionEvolver: FunctionComponent<ExpressionEvolverType> = ({
   propMinWidth,
 }) => {
   const expressionEvolverStyle: CSSProperties = useMemo(() => {
-    return {
-      padding: propPadding,
-    };
+    return { padding: propPadding };
   }, [propPadding]);
 
   const functionFolderStyle: CSSProperties = useMemo(() => {
-    return {
-      gap: propGap,
-    };
+    return { gap: propGap };
   }, [propGap]);
 
   const logicLabStyle: CSSProperties = useMemo(() => {
-    return {
-      alignSelf: propAlignSelf,
-      padding: propPadding1,
-    };
+    return { alignSelf: propAlignSelf, padding: propPadding1 };
   }, [propAlignSelf, propPadding1]);
 
   const calculationCasementStyle: CSSProperties = useMemo(() => {
-    return {
-      minWidth: propMinWidth,
-    };
+    return { minWidth: propMinWidth };
   }, [propMinWidth]);
 
   return (
     <div
-      className="flex-1 rounded-11xl bg-primary-indigo-light overflow-hidden flex flex-row items-start justify-start py-10 px-[18px] box-border min-w-[232px] text-left text-5xl text-ghostwhite font-body-l-medium sm:pt-[26px] sm:pb-[26px] sm:box-border"
+      className="group relative flex-1 rounded-11xl border border-brand-border bg-surface-gradient p-6 shadow-panel-glow hover:border-brand-purple/40 transition-all min-w-[232px] text-left text-5xl text-ghostwhite font-sans sm:pt-[26px] sm:pb-[26px] sm:box-border"
       style={expressionEvolverStyle}
     >
+      <div className="absolute -right-16 -top-16 h-32 w-32 rounded-full bg-brand-purple/10 blur-2xl group-hover:bg-brand-cyan/15 transition-all" />
       <div
-        className="flex-1 flex flex-col items-center justify-start gap-[20px]"
+        className="flex-1 flex flex-col items-center justify-start gap-[20px] relative z-10"
         style={functionFolderStyle}
       >
         <div
@@ -70,14 +60,14 @@ const ExpressionEvolver: FunctionComponent<ExpressionEvolverType> = ({
             {starterPlan}
           </h3>
           <div
-            className="relative text-21xl tracking-[-0.02em] leading-[130%] font-semibold text-primary-lilac inline-block min-w-[102px] whitespace-nowrap sm:text-5xl sm:leading-[31px] md800:text-13xl md800:leading-[42px]"
+            className="relative text-21xl tracking-[-0.02em] leading-[130%] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-brand-cyan to-brand-glow inline-block min-w-[102px] whitespace-nowrap sm:text-5xl sm:leading-[31px] md800:text-13xl md800:leading-[42px]"
             style={calculationCasementStyle}
           >
             {calculationCasement}
           </div>
         </div>
         <div className="self-stretch flex flex-col items-center justify-start gap-[40px] text-base sm:gap-[20px]">
-          <div className="self-stretch relative leading-[150%]">
+          <div className="self-stretch relative leading-[150%] text-slate-300">
             <ul className="m-0 font-inherit text-inherit pl-[21px]">
               <li className="mb-0">{responsiveWebsiteDesignAn}</li>
               <li className="mb-0">{basicSEO}</li>
@@ -90,11 +80,15 @@ const ExpressionEvolver: FunctionComponent<ExpressionEvolverType> = ({
             variant="contained"
             sx={{
               textTransform: "none",
-              color: "#f8f9ff",
               fontSize: "16",
-              background: "#ac6cff",
+              fontWeight: 600,
+              background: "linear-gradient(135deg, #2563EB 0%, #7C3AED 50%, #06B6D4 100%)",
               borderRadius: "20px",
-              "&:hover": { background: "#ac6cff" },
+              "&:hover": {
+                background: "linear-gradient(135deg, #2563EB 0%, #7C3AED 50%, #06B6D4 100%)",
+                opacity: 0.9,
+                boxShadow: "0 0 30px rgba(0, 240, 255, 0.3)",
+              },
               width: 120,
               height: 48,
             }}
